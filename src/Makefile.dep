@@ -1,0 +1,25 @@
+fsusb2n.o: fsusb2n.cpp ktv.hpp em2874-core.hpp IoThread.hpp usbops.hpp \
+ utils.h
+usbops.o: usbops.cpp usbops.hpp
+em2874-core.o: em2874-core.cpp usbops.hpp em2874-core.hpp IoThread.hpp
+ktv.o: ktv.cpp ktv.hpp em2874-core.hpp IoThread.hpp usbops.hpp \
+ em2874-card.hpp
+IoThread.o: IoThread.cpp usbops.hpp IoThread.hpp
+message.o: message.c message.h
+tssplitter_lite.o: tssplitter_lite.c decoder.h tssplitter_lite.h
+utils.o: utils.c decoder.h utils.h message.h tssplitter_lite.h
+arib_std_b25.o: arib25/arib_std_b25.c arib25/arib_std_b25.h \
+ arib25/arib25_api.h arib25/portable.h arib25/b_cas_card.h \
+ arib25/arib_std_b25_error_code.h arib25/multi2.h \
+ arib25/ts_common_types.h arib25/ts_section_parser.h
+b_cas_card.o: arib25/b_cas_card.c arib25/b_cas_card.h arib25/arib25_api.h \
+ arib25/portable.h arib25/b_cas_card_error_code.h \
+ arib25/../em2874-card.hpp
+ts_section_parser.o: arib25/ts_section_parser.c \
+ arib25/ts_section_parser.h arib25/arib25_api.h arib25/ts_common_types.h \
+ arib25/portable.h arib25/ts_section_parser_error_code.h
+multi2.o: arib25/multi2.cpp arib25/multi2.h arib25/arib25_api.h \
+ arib25/portable.h arib25/multi2_error_code.h arib25/multi2_compat.h \
+ arib25/multi2_cipher.h arib25/multi2_block.h arib25/multi2_ymm2.h \
+ arib25/multi2_ymm.h arib25/multi2_xmm.h arib25/multi2_neon2.h \
+ arib25/multi2_neon.h
