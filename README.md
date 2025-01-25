@@ -23,7 +23,7 @@ PRODUCT-ID  0x0029 or 0x003b
 
 ## 【使用方法】
 
-recfsusb2n [-v] [--b25] [--dev devfile] [--wait n (1wait==100milsec)] [--sid hd,sd1,sd2,sd3,1seg,all,epg,epg1seg] channel recsec destfile
+$ recfsusb2n [-v] [--b25] [--dev devfile] [--wait n (1wait==100milsec)] [--sid hd,sd1,sd2,sd3,1seg,all,epg,epg1seg] channel recsec destfile
 
 -v : ログを標準出力する  
 --b25 : B25解除する  B25解除を行わないでビルドした場合は指定不可  
