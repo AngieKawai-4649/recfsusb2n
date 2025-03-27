@@ -1,22 +1,21 @@
-/* SunPTV-USB   (c) 2016 trinity19683
-  util functions for recfsusb2n (Linux OSes)
-  utils.h
-  2016-02-04
-*/
+#ifndef UTILS_H
+#define UTILS_H
+
 #pragma once
 
 #include <time.h>
+#include <channel_cnf.h>
 
 /* options, parameters */
 struct Args {
 	unsigned int flags;
-	unsigned int freq;
 	unsigned int recsec;
 	unsigned int splitter;
 	unsigned int waitcnt;
 	char sid_list[32];
 	char* devfile;
 	char* destfile;
+	CHANNEL_INFO channel_info;
 };
 
 
@@ -34,18 +33,19 @@ struct OutputBuffer {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void u_difftime(struct timespec *, struct timespec *, int *, int *);
-void parseOption(int argc, char * const argv[], struct Args *);
-void setSignalHandler(const int mode, void (*func_handler)(int));
-int OutputBuffer_release(struct OutputBuffer* const);
-int OutputBuffer_put(struct OutputBuffer* const, void *buf, unsigned length);
-int OutputBuffer_flush(struct OutputBuffer* const);
-struct OutputBuffer* create_FileBufferedWriter(unsigned  bufSize, const char* const);
-struct OutputBuffer* create_TSParser(unsigned  bufSize, struct OutputBuffer* const  pOutput, const unsigned  mode, void *usbDev);
-int set_ch_table(void);
+extern void u_difftime(struct timespec *, struct timespec *, int *, int *);
+extern int parseOption(int argc, char * const argv[], struct Args *);
+extern void setSignalHandler(const int mode, void (*func_handler)(int));
+extern int OutputBuffer_release(struct OutputBuffer* const);
+extern int OutputBuffer_put(struct OutputBuffer* const, void *buf, unsigned length);
+extern int OutputBuffer_flush(struct OutputBuffer* const);
+extern struct OutputBuffer* create_FileBufferedWriter(unsigned  bufSize, const char* const);
+extern struct OutputBuffer* create_TSParser(unsigned  bufSize, struct OutputBuffer* const  pOutput, const unsigned  mode, void *usbDev);
+extern int set_ch_table(void);
 #ifdef __cplusplus
 }
 #endif
 
+#endif
 
 /*EOF*/

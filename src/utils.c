@@ -1,8 +1,3 @@
-/* SunPTV-USB   (c) 2016 trinity19683
-  util functions for recfsusb2n (Linux OSes)
-  utils.c
-  2016-02-04
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,7 +40,7 @@ static void usage(const char *argv0)
 	exit(1);
 }
 
-void parseOption(int argc, char * const argv[], struct Args* p_args)
+int parseOption(int argc, char * const argv[], struct Args* p_args)
 {
 	int c;
 	char *ptr;
@@ -99,13 +94,9 @@ void parseOption(int argc, char * const argv[], struct Args* p_args)
 	}
 
 	ptr = argv[optind++];
-	c = strtol(ptr, NULL, 10);
-	if(1 <= c && c <= 62) {
-		//# UHF (1, 2, .., 13, 14, .., 62)
-		args->freq = c * 6000 +  395143;
-	}else{
-		warn_msg(0,"invalid channel '%s'", ptr);
-		exit(1);
+	int ret = search_channel_key(ptr, 0, &(args->channel_info));
+	if(ret == CH_RETURN_NOTFOUND){
+		snprintf(args->channel_info.channel_key, sizeof(args->channel_info.channel_key), "%s", ptr);
 	}
 
 	ptr = argv[optind++];
@@ -118,6 +109,8 @@ void parseOption(int argc, char * const argv[], struct Args* p_args)
 	if(strcmp("-", ptr) != 0) {
 		args->destfile = ptr;
 	}
+
+	return(ret);
 }
 
 /* change signal handler (SIGINT, SIGTERM) */
@@ -507,85 +500,5 @@ struct OutputBuffer* create_TSParser(unsigned  bufSize, struct OutputBuffer* con
 	splitbuf.buffer_size = 0;
 	return pThis;
 }
-
-/****************************************************
-int channel_conv(char* channel)
-{
-	int i = 0;
-	char buf[4];
-	while(channel_table[i].freq > 0) {
-		//sprintf(buf, "%03d", channel_table[i].sid);
-		snprintf(buf, sizeof(buf), "%03d", channel_table[i].sid);
-		if(strcmp(channel, channel_table[i].channel) == 0
-			|| strcmp(channel, buf) == 0)
-			return i;
-		i++;
-	}
-	return -1;
-}
-
-int set_ch_table(void)
-{
-	FILE *fp;
-	char *p, buf[256];
-	ssize_t len;
-
-	if((len = readlink("/proc/self/exe", buf, sizeof(buf) - 8)) == -1)
-		return 2;
-	buf[len] = '\0';
-	strcat(buf, ".conf");
-
-	fp = fopen(buf, "r");
-	if(fp == NULL) {
-		warn_msg(0,"Cannot open '%s'\n", buf);
-		return -1;
-	}
-
-	int i = 0;
-	len = sizeof(channel_table[0].channel) - 1;
-	while(fgets(buf, sizeof(buf), fp) && i < MAX_CH - 1) {
-		if(buf[0] == ';')
-			continue;
-		p = buf + strlen(buf) - 1;
-		while((p >= buf) && (*p == '\r' || *p == '\n'))
-			*p-- = '\0';
-		if(p < buf)
-			continue;
-
-		int n = 0;
-		char *cp[4];
-		int bOk = FALSE;
-		p = cp[n++] = buf;
-		while(1) {
-			p = strchr(p, '\t');
-			if(p) {
-				*p++ = '\0';
-				cp[n++] = p;
-				if(n > 3) {
-					bOk = TRUE;
-					break;
-				}
-			}else
-				break;
-		}
-		if(bOk) {
-			strncpy(channel_table[i].channel, cp[0], len);
-			channel_table[i].channel[len] = '\0';
-			channel_table[i].freq = (int)strtol(cp[1], NULL, 10);
-			channel_table[i].sid = (int)strtol(cp[2], NULL, 10);
-			channel_table[i].tsid = (int)strtol(cp[3], NULL, 0);
-			i++;
-		}
-	}
-
-	fclose(fp);
-	channel_table[i].channel[0] = '\0';
-	channel_table[i].freq = 0;
-	channel_table[i].sid = 0;
-	channel_table[i].tsid = 0;
-
-	return 0;
-}
-****************************************************/
 
 /*EOF*/

@@ -40,19 +40,21 @@
 #EXTERNAL : libarib25.so.0直下にlibpcsclite.so.1
 #
 
+CHANNELCNF = `pkg-config libchannelcnf --cflags`
+LIBS = `pkg-config libchannelcnf --libs`
 ifdef STARBUCKS
 STD_B25 = -DSTD_B25
-LIBS    = -larib25 -lstarbucks
+LIBS    += -larib25 -lstarbucks
 else
 ifdef BUILT-IN
 STD_B25 = -DSTD_B25
 DB_CARDREADER = -DDB_CARDREADER
 PCSC = `pkg-config libpcsclite --cflags`
-LIBS    = -larib25 -lktvcardreader
+LIBS    += -larib25 -lktvcardreader
 else
 ifdef EXTERNAL 
 STD_B25 = -DSTD_B25
-LIBS    = -larib25 `pkg-config libpcsclite --libs`
+LIBS    += -larib25 `pkg-config libpcsclite --libs`
 endif
 endif
 endif
@@ -64,8 +66,8 @@ CXX	= g++
 CC	= gcc
 #CFLAGS   = -O2 -Wall -Wno-format-truncation -Wno-format-overflow -pthread -D_LARGEFILE_SOURCE
 #CFLAGS   = -O2 -Wall -Wno-format-overflow -pthread -D_LARGEFILE_SOURCE
-CXXFLAGS = -O2 -Wall -pthread -D_LARGEFILE_SOURCE $(DB_CARDREADER) $(PCSC)
-CFLAGS   = -O2 -Wall -pthread -D_LARGEFILE_SOURCE $(DB_CARDREADER) $(PCSC)
+CXXFLAGS = -O2 -Wall -pthread -D_LARGEFILE_SOURCE $(DB_CARDREADER) $(CHANNELCNF) $(PCSC)
+CFLAGS   = -O2 -Wall -pthread -D_LARGEFILE_SOURCE $(DB_CARDREADER) $(CHANNELCNF) $(PCSC)
 ifeq ($(shell getconf LONG_BIT),32)
 CFLAGS  += -D_FILE_OFFSET_BITS=64
 endif

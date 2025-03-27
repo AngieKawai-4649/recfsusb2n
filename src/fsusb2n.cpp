@@ -25,13 +25,20 @@ void sighandler(int arg)
 int main(int argc, char **argv)
 {
 	int ret = 0;
-	struct Args args = {0,0,0,0,20,"",NULL,NULL};
-	parseOption(argc, argv, &args);
+	struct Args args;
 
+
+	memset(&args, '\0', sizeof(struct Args));
+	ret = parseOption(argc, argv, &args);
 	// ログ出力先設定
 	std::ostream& log = (args.destfile==NULL) ? std::cerr : std::cout;
 	log << "recfsusb2n ver. 0.9.2" << std::endl << "ISDB-T DTV Tuner FSUSB2N" << std::endl;
 	EM2874Device::setLog(&log);
+
+	if(ret == CH_RETURN_NOTFOUND){
+		log << "Channel " << args.channel_info.channel_key << " Not Found " << std::endl;
+		return 1;
+	}
 
 	EM2874Device *usbDev = EM2874Device::AllocDevice(args.devfile);
 	if(usbDev == NULL){
@@ -50,7 +57,7 @@ int main(int argc, char **argv)
 	}
 
 	pDev->InitTuner();
-	pDev->SetFrequency(args.freq);
+	pDev->SetFrequency(args.channel_info.freq);
 	pDev->InitDeMod();
 	pDev->ResetDeMod();
 
