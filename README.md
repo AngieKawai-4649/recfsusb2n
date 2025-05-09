@@ -9,16 +9,24 @@ PRODUCT-ID  0x0029 or 0x003b
 
 ## 【改造箇所】
 
-1.コンパイル時のワーニング除去  
-２．内蔵カードリーダー使用時、カードリーダーアクセス処理を別プロセスに分離（詳細はktv_cardreaderを参照）  
-３．チューナーデバイスサーチ時、マルチスレッド処理において使用していたboostライブラリを  
+1. コンパイル時のワーニング除去  
+2. 内蔵カードリーダー使用時、カードリーダーアクセス処理を別プロセスに分離（詳細はktv_cardreaderを参照）  
+3. チューナーデバイスサーチ時、マルチスレッド処理において使用していたboostライブラリを  
 　　linuxシステムコールライブラリ、pthreadライブラリを使用するように修正  
-４．tssplitter_lite機能を追加  
-５．デバイスを直接指定して起動する機能を追加  
-６．B25デコーダープログラムを抱え込んでビルドしていたのを削除し、libarib25.soをリンクするように修正  
+4. tssplitter_lite機能を追加  
+5. デバイスを直接指定して起動する機能を追加  
+6. B25デコーダープログラムを抱え込んでビルドしていたのを削除し、libarib25.soをリンクするように修正
+7. channelconfを使用してチャンネル情報を取得するように修正  
+
 
 ## 【ビルド方法】  
-  Makefileのコメントを参照
+b25デコードをする場合、事前に https://github.com/AngieKawai-4649/libarib25 を導入する  
+事前に https://github.com/AngieKawai-4649/channelconf を導入する（必須）  
+取得  
+git clone https://github.com/AngieKawai-4649/recfsusb2n.git  
+$ cd recfsusb2n/src    
+
+ビルドはMakefileのコメントを参照  
 
 
 ## 【使用方法】
